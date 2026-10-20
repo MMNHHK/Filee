@@ -3,6 +3,7 @@ bin/
 obj/
 artifacts/
 publish/
+publish-cli/
 Releases/
 
 # Downloaded conversion engines (see build/fetch-engines.ps1)
