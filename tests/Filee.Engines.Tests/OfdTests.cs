@@ -1,4 +1,4 @@
-﻿// OFD (GB/T 33190, the Chinese fixed-layout standard: e-invoices, official documents) → DOCX / TXT with the
+// OFD (GB/T 33190, the Chinese fixed-layout standard: e-invoices, official documents) → DOCX / TXT with the
 // built-in reader. The sample packages are written in the test: the standard's own structure (invoice with a
 // seal) and the WPS variant (page size in Document.xml, colour as a decimal FillColor child element).
 
