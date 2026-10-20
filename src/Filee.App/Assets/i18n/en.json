@@ -23,6 +23,7 @@
   "close.tray": "Keep in tray",
   "close.quit": "Quit",
   "close.dont_ask": "Don't ask again",
+  "trial.expired_title": "The free period is over",
 
   "home.title": "Home",
   "home.drop_title": "Drop files here",

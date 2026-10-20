@@ -21,6 +21,7 @@
   "close.tray": "ट्रे में रखें",
   "close.quit": "बंद करें",
   "close.dont_ask": "दोबारा न पूछें",
+  "trial.expired_title": "निःशुल्क अवधि समाप्त हो गई है",
   "home.title": "होम",
   "home.drop_title": "फ़ाइलें यहाँ छोड़ें",
   "home.drop_hint": "या Explorer में फ़ाइलें खींचते समय {0} दबाए रखें। डोनट टूलबार आपके कर्सर पर खुलेगा।",

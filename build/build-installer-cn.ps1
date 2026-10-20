@@ -97,6 +97,8 @@ elseif (-not $PublishDir) {
     Copy-Item (Join-Path $root 'LICENSE') $PublishDir -Force
     Copy-Item (Join-Path $root 'THIRD-PARTY-NOTICES.md') $PublishDir -Force
     Copy-Item (Join-Path $PSScriptRoot 'quick-start-cn.txt') $PublishDir -Force
+    # The distribution's trial window: edit installer/distribution.json before packaging to change it.
+    Copy-Item (Join-Path $root 'installer\distribution.json') $PublishDir -Force
 
     # Debug symbols (~100 MB of .pdb, of which 100 MB is libSkia/libHarfBuzz) are useless to users.
     Remove-Item (Join-Path $PublishDir '*.pdb') -Force -ErrorAction SilentlyContinue

@@ -23,6 +23,7 @@
   "close.tray": "保留在托盘",
   "close.quit": "退出",
   "close.dont_ask": "不再询问",
+  "trial.expired_title": "使用期限已到",
 
   "home.title": "首页",
   "home.drop_title": "将文件拖放到这里",

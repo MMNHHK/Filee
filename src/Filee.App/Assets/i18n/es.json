@@ -21,6 +21,7 @@
   "close.tray": "Mantener en la bandeja",
   "close.quit": "Salir",
   "close.dont_ask": "No volver a preguntar",
+  "trial.expired_title": "El período gratuito ha terminado",
   "home.title": "Inicio",
   "home.drop_title": "Suelta archivos aquí",
   "home.drop_hint": "O mantén {0} mientras arrastras archivos en el Explorador. El menú circular se abre donde esté el cursor.",

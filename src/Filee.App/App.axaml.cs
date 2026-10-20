@@ -8,7 +8,9 @@ using Avalonia.Threading;
 using Filee.App.Controls;
 using Filee.App.Services;
 using Filee.App.Services.Triggers;
+using Filee.App.Views;
 using Filee.Core.Conversion;
+using Filee.Core.Distribution;
 using Filee.Core.Localization;
 using Filee.Core.Platform;
 using Filee.Core.Settings;
@@ -67,6 +69,26 @@ public partial class App : Application
         var loc = AppHost.Get<LocalizationService>();
         loc.Attach(this);
         ApplySettings(store.Settings);
+
+        // 格式转换器 distribution builds (installer/distribution.json) run for a trial window; a development
+        // build has no file and never restricts. Once the window is over Filee shows the notice and stops: no
+        // tray, no conversions. --quit is still honoured so Setup can update or uninstall a stopped copy.
+        if (TrialGuard.TryLoad(AppContext.BaseDirectory) is { } distribution
+            && TrialGuard.IsExpired(distribution, store.Directory))
+        {
+            log.LogWarning("The distribution's trial window is over; Filee shows the notice and stops");
+            if (Program.Instance is { } first)
+                ListenWhileExpired(first);
+            Program.InstanceAcquired += ListenWhileExpired;
+            var expired = new TrialExpiredWindow(distribution.ExpiredMessage);
+            expired.Closed += (_, _) =>
+            {
+                watchdog.Dispose();
+                Quit();
+            };
+            expired.Show();
+            return;
+        }
         // Every engine's availability, checked once off the UI thread: the first donut or drop otherwise starts
         // every engine's check (FFmpeg -version, folder searches) on the UI thread and freezes it meanwhile.
         _ = AppHost.Get<ConverterCatalog>().CheckInBackgroundAsync();
@@ -124,7 +146,7 @@ public partial class App : Application
 
         AppHost.Get<TrayService>().Create(this);
         AppHost.Get<WindowService>().EnsureToast();
-        AppHost.Get<ConversionService>().FeedbackDue += (_, _) => AppHost.Get<WindowService>().ShowFeedbackNotice();
+        // This fork: no GitHub star/feedback card - the distribution's own notice (the trial window) replaces it.
         AppHost.Get<WatchFolderService>().Start();
         // Once LibreOffice is installed: prepare its profiles while the user isn't converting yet.
         AppHost.Get<EngineDownloadService>().WarmUpInBackground(TimeSpan.FromSeconds(10));
@@ -149,6 +171,18 @@ public partial class App : Application
         // say so once, next to the tray, and on the Home page for as long as it lasts.
         if (AppHost.Get<ElevationService>().ShellCannotReachFilee)
             DispatcherTimer.RunOnce(() => AppHost.Get<WindowService>().ShowElevationNotice(), TimeSpan.FromSeconds(2));
+    }
+
+    /// <summary>While the trial notice is up, later launches hand their arguments over and exit quietly;
+    /// Filee ignores them, except --quit (Setup updates and the uninstaller need it to work).</summary>
+    private static void ListenWhileExpired(SingleInstance instance)
+    {
+        instance.ArgumentsReceived += args =>
+        {
+            if (args.Contains("--quit"))
+                Dispatcher.UIThread.Post(Quit);
+        };
+        instance.StartListening();
     }
 
     private void ListenForLaterLaunches(SingleInstance instance, ILogger log)

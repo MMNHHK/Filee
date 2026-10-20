@@ -76,7 +76,9 @@ public sealed class AppSettings
     /// <summary>Show the Explorer "Convert with Filee" context menu entry.</summary>
     public bool ContextMenuEnabled { get; set; } = true;
 
-    public bool CheckForUpdates { get; set; } = true;
+    /// <summary>Check GitHub for new releases. Off by default in this fork: the 格式转换器 distribution is
+    /// updated through its own channel, so a fresh install talks to no one.</summary>
+    public bool CheckForUpdates { get; set; }
 
     /// <summary>What closing the main window does. A value from a newer Filee reads as <see cref="CloseAction.Ask"/>.</summary>
     [JsonConverter(typeof(LenientEnumJsonConverter<CloseAction>))]

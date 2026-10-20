@@ -1,0 +1,20 @@
+<!-- Shown instead of the app when the 格式转换器 distribution's trial window is over: the message comes from
+     distribution.json (where to get the new version); OK (or closing the window) ends Filee. -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Filee.App.Views.TrialExpiredWindow"
+        Title="{DynamicResource trial.expired_title}"
+        Icon="avares://Filee/Assets/Icons/filee.ico"
+        Width="420"
+        SizeToContent="Height"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen">
+  <StackPanel Margin="22" Spacing="14">
+    <StackPanel Spacing="4">
+      <TextBlock Classes="h2" Text="{DynamicResource trial.expired_title}" />
+      <TextBlock x:Name="Message" Classes="caption" TextWrapping="Wrap" />
+    </StackPanel>
+    <Button Classes="accent" MinWidth="88" HorizontalContentAlignment="Center" HorizontalAlignment="Right"
+            Content="{DynamicResource common.ok}" Click="OnOk" IsDefault="True" IsCancel="True" />
+  </StackPanel>
+</Window>

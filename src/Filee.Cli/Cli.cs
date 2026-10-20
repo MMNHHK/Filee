@@ -1,13 +1,15 @@
 // The "filee" commands: convert, watch, formats, presets. Writes results for people (one line per file) or, with
 // --json, one JSON document for other programs. Exit codes: 0 everything converted, 1 some files failed,
-// 2 wrong arguments or a missing input, 3 nothing to convert.
+// 2 wrong arguments or a missing input, 3 nothing to convert, 4 the distribution's trial period is over.
 
 using System.Text.Json;
 using Filee.Core.Conversion;
+using Filee.Core.Distribution;
 using Filee.Core.Formats;
 using Filee.Core.Localization;
 using Filee.Core.Platform;
 using Filee.Core.Presets;
+using Filee.Core.Settings;
 using Filee.Core.Watching;
 
 namespace Filee.Cli;
@@ -18,6 +20,9 @@ internal static class Cli
     public const int SomeFailed = 1;
     public const int UsageError = 2;
     public const int NothingToDo = 3;
+
+    /// <summary>The 格式转换器 distribution's trial window (installer/distribution.json) is over.</summary>
+    public const int TrialExpired = 4;
 
     /// <param name="createHost">Engines and settings (tests pass a host with a temporary settings folder).</param>
     public static async Task<int> RunAsync(IReadOnlyList<string> args, TextWriter output, TextWriter errors,
@@ -38,6 +43,15 @@ internal static class Cli
             case "version":
                 output.WriteLine($"filee {Help.Version}");
                 return Success;
+        }
+
+        // 格式转换器 distribution builds (installer/distribution.json, next to the executables or one folder up
+        // from a cli copy): the trial window of this version. A development build has no file and never restricts.
+        if (TrialGuard.TryLoad(AppContext.BaseDirectory, Path.Combine(AppContext.BaseDirectory, "..")) is { } distribution
+            && TrialGuard.IsExpired(distribution, UserDataStore.DefaultDirectory))
+        {
+            errors.WriteLine($"filee: {distribution.ExpiredMessage}");
+            return TrialExpired;
         }
 
         await using var host = (createHost ?? (() => CliHost.Create()))();
