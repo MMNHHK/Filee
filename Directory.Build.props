@@ -15,12 +15,14 @@
     <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
 
     <Version>1.12.0</Version>
-    <Product>Filee</Product>
+    <Product>格式转换器</Product>
     <Authors>Filee contributors</Authors>
     <Copyright>Copyright (c) Filee contributors</Copyright>
 
-    <!-- Single source of truth for the GitHub repository (used by the updater and the About page). -->
-    <FileeRepositoryUrl>https://github.com/KnifeLemon/Filee</FileeRepositoryUrl>
+    <!-- Upstream: https://github.com/KnifeLemon/Filee . This build lives in the fork below: the in-app update
+         check reads it, so users of this OFD-enabled build are not offered the upstream installer (which has no
+         OFD support) as an "update". -->
+    <FileeRepositoryUrl>https://github.com/MMNHHK/Filee</FileeRepositoryUrl>
     <RepositoryUrl>$(FileeRepositoryUrl)</RepositoryUrl>
   </PropertyGroup>
 </Project>
