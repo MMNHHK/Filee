@@ -9,6 +9,7 @@ using Filee.Engines.Email;
 using Filee.Engines.Hwp.Hwpx.Docx;
 using Filee.Engines.Hwp.Hwpx.Pptx;
 using Filee.Engines.Infrastructure;
+using Filee.Engines.Ofd;
 using Filee.Engines.Office;
 using Filee.Engines.Office.Sheets;
 using Filee.Engines.Pdf;
@@ -45,6 +46,7 @@ internal static class DocumentReaders
         ["potx"] = PptxReader.Read,
         ["ppsx"] = PptxReader.Read,
         ["pdf"] = PdfDocumentReader.Read,
+        ["ofd"] = OfdReader.Read,
         // HWP comes here as HWPX, converted by rhwp first (the route planner adds that step).
         ["hwpx"] = HwpxReader.Read,
         ["html"] = HtmlReader.Read,

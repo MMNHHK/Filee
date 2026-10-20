@@ -72,6 +72,7 @@ public static class FormatRegistry
         new("pdf", "PDF", FormatCategory.Pdf, ["pdf"]),
 
         // Word processing
+        new("ofd", "OFD", FormatCategory.Document, ["ofd"], Writable: false),
         new("docx", "DOCX", FormatCategory.Document, ["docx"]),
         new("docm", "DOCM", FormatCategory.Document, ["docm"]),
         new("dotx", "DOTX", FormatCategory.Document, ["dotx"]),
