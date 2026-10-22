@@ -1,4 +1,4 @@
-﻿{
+{
   "app.name": "Format Converter",
   "app.tagline": "Drag, drop, converted.",
 
@@ -365,7 +365,7 @@
   "presets.group.image": "Image",
   "presets.quality": "Quality",
   "presets.target_kb": "Compress under (KB)",
-  "presets.target_kb_hint": "Finds the highest quality that fits the size, then shrinks the picture, until the file is small enough. Lossless targets (PNG, GIF) only shrink. Multi-page files and animations ignore the limit.",
+  "presets.target_kb_hint": "Finds the highest quality that fits the size, then shrinks the picture, until the file is small enough. Lossless targets (PNG, GIF) only shrink. Multi-page files and animations ignore the limit. Metadata is dropped when it alone exceeds the limit.",
   "presets.resize": "Resize",
   "presets.resize.None": "Original size",
   "presets.resize.Percent": "Scale by percent",

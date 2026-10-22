@@ -24,7 +24,10 @@ internal static class TargetSizeCompressor
     /// <summary>
     /// Makes <paramref name="image"/> encode under <paramref name="options"/>.TargetKb bytes: seeks the highest
     /// fitting quality first (pixel dimensions untouched), then shrinks the picture and seeks again if even the
-    /// lowest quality is too big. The image's quality setting is left at what will be written.
+    /// lowest quality is too big. Metadata rides along with "keep metadata" on, but the size cap beats it: an
+    /// oversized picture loses its profiles and comments first (an EXIF thumbnail or GPS block of a phone photo
+    /// can outweigh its pixels), keeping only the colour profile - a few hundred bytes, and dropping it would
+    /// shift every colour. The image's quality setting is left at what will be written.
     /// </summary>
     /// <param name="targetFormat">Preset target id (the encoder settings depend on it through <paramref name="options"/>).</param>
     internal static void Fit(IMagickImage<byte> image, string targetFormat, ImageOptions options)
@@ -34,6 +37,8 @@ internal static class TargetSizeCompressor
         var takesQuality = TakesQuality(targetFormat, options);
         var top = (int)Math.Clamp(options.Quality, 1, 100);
 
+        if (EncodedSize(image, format) > targetBytes)
+            StripMetadata(image);
         if (EncodedSize(image, format) > targetBytes && takesQuality)
             SeekQuality(image, format, top, targetBytes);
         for (var round = 0; round < MaxShrinkRounds && EncodedSize(image, format) > targetBytes; round++)
@@ -43,6 +48,15 @@ internal static class TargetSizeCompressor
             if (takesQuality)
                 SeekQuality(image, format, top, targetBytes);
         }
+    }
+
+    /// <summary>Removes the profiles and text attributes that would be written with the picture, except the ICC one.</summary>
+    private static void StripMetadata(IMagickImage<byte> image)
+    {
+        var colorProfile = image.GetColorProfile();
+        image.Strip();
+        if (colorProfile is not null)
+            image.SetProfile(colorProfile);
     }
 
     /// <summary>Quality-seeking formats, minus a lossless WebP (its quality setting does nothing there).</summary>

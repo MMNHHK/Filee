@@ -105,4 +105,40 @@ public class TargetSizeTests(EngineFixture fx) : IClassFixture<EngineFixture>
         using var result = new MagickImage(job.Outputs.Single());
         Assert.Equal((800u, 600u), (result.Width, result.Height));
     }
+
+    /// <summary>A picture whose metadata (EXIF, an ICC profile, a long comment) is bigger than the limit: keeping it
+    /// cannot beat the user's size cap - a phone photo with a fat EXIF block is the real-world case.</summary>
+    private static string FatMetadataImage(string folder)
+    {
+        using var image = new MagickImage("gradient:#7F77DD-#1D9E75", 800, 600);
+        // Random text does not compress: ~330 KB of it rides along in the file, however small the pixels get.
+        image.SetAttribute("comment", string.Concat(Enumerable.Range(0, 9500).Select(_ => Guid.NewGuid().ToString())));
+        var path = Path.Combine(folder, "meta.png");
+        image.Write(path, MagickFormat.Png);
+        return path;
+    }
+
+    [Fact]
+    public async Task Kept_metadata_never_beats_the_size_limit()
+    {
+        var dir = fx.NewFolder();
+        var source = FatMetadataImage(dir);
+
+        var job = await fx.ConvertAsync([source], new Preset { TargetFormat = "png", Image = { TargetKb = 100, KeepMetadata = true } });
+
+        AssertDone(job);
+        AssertUnder(job.Outputs.Single(), 100);
+    }
+
+    [Fact]
+    public async Task A_very_small_limit_is_reached_even_for_incompressible_pixels()
+    {
+        var dir = fx.NewFolder();
+        var source = NoisyImage(dir);
+
+        var job = await fx.ConvertAsync([source], new Preset { TargetFormat = "png", Image = { TargetKb = 5 } });
+
+        AssertDone(job);
+        AssertUnder(job.Outputs.Single(), 5);
+    }
 }
