@@ -364,6 +364,8 @@
   "presets.same_as_source": "Ten sam format co źródło",
   "presets.group.image": "Obraz",
   "presets.quality": "Jakość",
+  "presets.target_kb": "Kompresuj do (KB)",
+  "presets.target_kb_hint": "Znajduje najwyższą jakość mieszczącą się w limicie, a w razie potrzeby zmniejsza obraz. Formaty bezstratne (PNG, GIF) zmniejszają tylko obraz. Pliki wielostronicowe ignorują limit.",
   "presets.resize": "Zmień rozmiar",
   "presets.resize.None": "Oryginalny rozmiar",
   "presets.resize.Percent": "Skaluj procentowo",

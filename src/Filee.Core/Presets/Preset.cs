@@ -200,6 +200,17 @@ public sealed class ImageOptions
     /// <summary>Lossy quality 1-100 (JPG, WEBP, AVIF, HEIC).</summary>
     public int Quality { get; set; } = 90;
 
+    /// <summary>
+    /// Compress the output under this many kilobytes (0 = off, the default). Finds the highest quality that fits, then
+    /// shrinks the picture, until the file is small enough — for forms and applications that cap the photo size.
+    /// Lossless targets (PNG, GIF) only shrink; multi-page files (TIFF pages, animations, icons) ignore the limit.
+    /// </summary>
+    public int TargetKb { get; set; }
+
+    /// <summary>True when <see cref="TargetKb"/> asks for a file under a size limit.</summary>
+    [JsonIgnore]
+    public bool CompressesToSize => TargetKb > 0;
+
     public ResizeMode Resize { get; set; } = ResizeMode.None;
 
     /// <summary>Turns the image (after its EXIF orientation is applied).</summary>

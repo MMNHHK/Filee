@@ -127,6 +127,8 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _traceColors = Math.Clamp(_edit.Trace.Colors, TracingOptions.MinColors, TracingOptions.MaxColors);
         _traceDetail = Math.Clamp(_edit.Trace.Detail, 0, 100);
         _quality = _edit.Image.Quality;
+        _setTargetKb = _edit.Image.CompressesToSize;
+        _targetKb = _edit.Image.TargetKb > 0 ? _edit.Image.TargetKb : 200;
         _resizePercent = _edit.Image.ResizePercent;
         _longEdge = _edit.Image.LongEdge;
         _width = _edit.Image.Width;
@@ -272,6 +274,12 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     [ObservableProperty] private Choice<ConflictPolicy> _conflict;
     [ObservableProperty] private Choice<TiffCompression> _tiffCompression;
     [ObservableProperty] private int _quality;
+
+    /// <summary>Compress under ImageOptions.TargetKb (a checkbox, like <see cref="_setDpi"/>: 0 KB means off).</summary>
+    [ObservableProperty] private bool _setTargetKb;
+    /// <summary>ImageOptions.TargetKb in KB; 200 is the usual cap of application forms.</summary>
+    [ObservableProperty] private int _targetKb;
+
     [ObservableProperty] private int _resizePercent;
     [ObservableProperty] private int _longEdge;
     [ObservableProperty] private int _width;
@@ -395,6 +403,9 @@ public sealed partial class PresetEditorViewModel : ObservableObject
     /// <summary>Rotate and flip for a PDF target, which has no image card to show them in.</summary>
     public bool ShowTurnForPdf => TargetId == "pdf";
     public bool ShowQuality => TargetId == BuiltInData.SameAsSource || LossyTargets.Contains(TargetId);
+
+    /// <summary>Size-limited compression: single-picture targets an encoder can shrink (not icons or vectors).</summary>
+    public bool ShowTargetKb => TargetIsImage && TargetId is not ("ico" or "cur" or "icns" or "svg" or "svgz");
     public bool ShowTiff => TargetId is "tiff" or BuiltInData.SameAsSource;
     public bool ShowWebp => TargetId is "webp" or BuiltInData.SameAsSource;
     public bool ShowMultiPageTiff => TargetId is "tiff";
@@ -470,6 +481,9 @@ public sealed partial class PresetEditorViewModel : ObservableObject
         _original.TargetFormat = TargetId;
         var image = _original.Image;
         image.Quality = Math.Clamp(Quality, 1, 100);
+        // Only where the option is shown: a limit chosen for a JPG target and left behind saves nothing (and would
+        // shrink media or document targets that never reach the compressor).
+        image.TargetKb = ShowTargetKb && SetTargetKb ? Math.Clamp(TargetKb, 1, 100_000) : 0;
         image.Resize = Resize.Value;
         // Only images and PDFs are turned; for any other target a rotation left over from an earlier target would make
         // every file fail ("can only turn images") with nothing on screen to turn it off.

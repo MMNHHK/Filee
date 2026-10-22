@@ -350,6 +350,8 @@
   "presets.same_as_source": "El mismo formato que el original",
   "presets.group.image": "Imagen",
   "presets.quality": "Calidad",
+  "presets.target_kb": "Comprimir a (KB)",
+  "presets.target_kb_hint": "Busca la calidad más alta que quepa en el tamaño y, si hace falta, reduce la imagen. Los formatos sin pérdida (PNG, GIF) solo se pueden reducir. Los archivos multipágina ignoran el límite.",
   "presets.resize": "Cambiar tamaño",
   "presets.resize.None": "Tamaño original",
   "presets.resize.Percent": "Escalar por porcentaje",

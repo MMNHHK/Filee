@@ -333,6 +333,15 @@ internal static class ImageEncoder
         var written = new List<string>();
         var (format, extension) = OutputFormat(targetFormat, options ?? new ImageOptions(), sourcePath);
 
+        // Size-limited compression (ImageOptions.TargetKb): one file per frame only. A multi-frame file's size is
+        // the sum of its pages, so per-frame limits make no sense there; icons build their own sizes from one image.
+        var fitsSize = options?.CompressesToSize == true && targetFormat != "apng"
+            && !(frames.Count > 1 && (MultiFrame.Contains(targetFormat) || animation))
+            && targetFormat is not ("ico" or "cur" or "icns");
+        if (fitsSize)
+            foreach (var frame in frames)
+                TargetSizeCompressor.Fit(frame, targetFormat, options!);
+
         if (targetFormat == "apng")
         {
             // One file, also for a single frame (a one-frame animation).

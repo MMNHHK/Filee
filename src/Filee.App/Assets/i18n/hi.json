@@ -350,6 +350,8 @@
   "presets.same_as_source": "स्रोत जैसा ही फ़ॉर्मैट",
   "presets.group.image": "इमेज",
   "presets.quality": "क्वालिटी",
+  "presets.target_kb": "इससे कम संपीड़ित करें (KB)",
+  "presets.target_kb_hint": "आकार में फिट होने वाली उच्चतम गुणवत्ता खोजता है, फिर आवश्यकता हो तो चित्र छोटा करता है। दोषरहित प्रारूप (PNG, GIF) केवल छोटा किए जा सकते हैं। बहु-पृष्ठ फ़ाइलें सीमा को अनदेखा करती हैं।",
   "presets.resize": "आकार बदलें",
   "presets.resize.None": "मूल आकार",
   "presets.resize.Percent": "प्रतिशत से स्केल करें",

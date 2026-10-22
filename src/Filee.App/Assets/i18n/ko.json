@@ -364,6 +364,8 @@
   "presets.same_as_source": "원본과 같은 형식",
   "presets.group.image": "이미지",
   "presets.quality": "품질",
+  "presets.target_kb": "압축 크기 (KB)",
+  "presets.target_kb_hint": "크기에 맞는 최고 품질을 찾고, 필요하면 이미지를 축소합니다. 무손실 형식(PNG, GIF)은 축소만 가능합니다. 다중 페이지 파일은 무시됩니다.",
   "presets.resize": "크기 조정",
   "presets.resize.None": "원본 크기",
   "presets.resize.Percent": "비율로 조정",

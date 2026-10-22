@@ -48,6 +48,12 @@
           </DockPanel>
           <Slider Minimum="1" Maximum="100" Value="{Binding Quality}" TickFrequency="1" IsSnapToTickEnabled="True" />
         </StackPanel>
+        <Grid ColumnDefinitions="Auto,12,*" IsVisible="{Binding ShowTargetKb}"
+              ToolTip.Tip="{DynamicResource presets.target_kb_hint}" ToolTip.ShowOnDisabled="True">
+          <CheckBox Content="{DynamicResource presets.target_kb}" IsChecked="{Binding SetTargetKb}" />
+          <NumericUpDown Grid.Column="2" Value="{Binding TargetKb}" Minimum="1" Maximum="100000" Increment="10"
+                         FormatString="0" IsEnabled="{Binding SetTargetKb}" />
+        </Grid>
         <Grid ColumnDefinitions="*,12,*">
           <StackPanel>
             <TextBlock Classes="label" Text="{DynamicResource presets.resize}" />

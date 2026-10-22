@@ -364,6 +364,8 @@
   "presets.same_as_source": "与源文件相同的格式",
   "presets.group.image": "图片",
   "presets.quality": "质量",
+  "presets.target_kb": "压缩至大小（KB）",
+  "presets.target_kb_hint": "自动寻找能达标的最高质量，必要时缩小图片，直到文件大小达标。无损格式（PNG、GIF）只能缩小图片。多页文件和动画不生效。",
   "presets.resize": "调整大小",
   "presets.resize.None": "原始大小",
   "presets.resize.Percent": "按百分比缩放",
