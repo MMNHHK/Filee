@@ -24,8 +24,10 @@ public sealed partial class PresetListItem(Preset preset, ILocalizer loc) : Obse
     }
 
     private static string TargetLabel(Preset p, ILocalizer l) =>
-        p.TargetFormat == BuiltInData.SameAsSource ? l["presets.same_as_source"]
-        : "→ " + (FormatLabels.NameOf(l, p.TargetFormat) ?? p.TargetFormat);
+        (p.TargetFormat == BuiltInData.SameAsSource ? l["presets.same_as_source"]
+            : "→ " + (FormatLabels.NameOf(l, p.TargetFormat) ?? p.TargetFormat))
+        // A size limit is part of the conversion, not an editor-only detail.
+        + (p.Image.CompressesToSize ? $" ≤{p.Image.TargetKb}KB" : "");
 }
 
 /// <summary>Pages that fill the window height and scroll their own parts instead of scrolling as a whole.</summary>

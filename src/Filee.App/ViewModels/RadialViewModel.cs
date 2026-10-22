@@ -123,7 +123,10 @@ public sealed partial class RadialViewModel(UserDataStore store, ILocalizer loc,
                 Caption = !caption ? null
                     : p.TargetFormat == BuiltInData.SameAsSource
                         ? string.Join("/", formats.Select(f => f.DisplayName).Take(2))
-                        : FormatLabels.NameOf(loc, p.TargetFormat),
+                        // A size limit is part of what the slice does: show it, or the only way to see the
+                        // compression is the preset editor ("PNG" alone says nothing about "PNG ≤100KB").
+                        : FormatLabels.NameOf(loc, p.TargetFormat)
+                          + (p.Image.CompressesToSize ? $" ≤{p.Image.TargetKb}KB" : ""),
                 IsEnabled = reason is null,
                 DisabledReason = reason,
             };
